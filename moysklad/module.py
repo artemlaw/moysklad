@@ -157,19 +157,7 @@ class MoySklad:
         # filter_str = f'?filter=moment>{from_date};moment<{to_date};&order=name,desc&expand=positions.assortment,state'
         url = f'{self.host}entity/customerorder{filter_str}'
         params = {'limit': 100, 'offset': 0}
-        orders_list = []
-        while True:
-            result = self.get_data(url, params)
-            if result:
-                response_json = result.json()
-                orders_list += response_json.get('rows')
-                params['offset'] += params['limit']
-                if response_json.get('meta').get('size') < params['offset']:
-                    break
-            else:
-                break
-        logger.info(f'Получено заказов за период: {len(orders_list)}')
-        return orders_list
+        return self.fetch_data(url, params)
 
 
 if __name__ == '__main__':
