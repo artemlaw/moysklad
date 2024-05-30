@@ -4,7 +4,7 @@ setup(
     name='moysklad',
     version='0.1',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=['requests'],
     author='Lubentsov Artem',
     author_email='artem.law@mail.ru',
     description='Integration module MoySklad',

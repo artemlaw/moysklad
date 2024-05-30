@@ -129,6 +129,45 @@ class MoySklad:
             logger.error('Не удалось создать заказ.')
         return response_content
 
+    def get_stock_all(self):
+        url = f'{self.host}report/stock/all'
+        params = {'limit': 1000, 'offset': 0}
+        stocks_list = []
+
+        while True:
+            result = self.get_data(url, params)
+            if result:
+                response_json = result.json()
+                stocks_list += response_json.get('rows')
+                params['offset'] += params['limit']
+                if response_json.get('meta').get('size') < params['offset']:
+                    break
+            else:
+                break
+        logger.info(f'Получен остаток по номенклатуре: {len(stocks_list)}')
+        return stocks_list
+
+    def get_orders(self, created_from):
+        url = f'{self.host}entity/customerorder'
+        # &expand=state.name
+        url_full = f'{url}?filter=created>{created_from}&order=name,desc&expand=positions.assortment,state'
+        params = {'limit': 100, 'offset': 0}
+
+        orders_list = []
+
+        while True:
+            result = self.get_data(url_full, params)
+            if result:
+                response_json = result.json()
+                orders_list += response_json.get('rows')
+                params['offset'] += params['limit']
+                if response_json.get('meta').get('size') < params['offset']:
+                    break
+            else:
+                break
+        logger.info(f'Получено заказов: {len(orders_list)}')
+        return orders_list
+
 
 if __name__ == '__main__':
     MS_API_TOKEN = '**************'
