@@ -150,13 +150,16 @@ class MoySklad:
         logger.info(f'Получен остаток по номенклатуре: {len(stocks_list)}')
         return stocks_list
 
-    def get_orders(self, from_date, to_date):
-        url = f'{self.host}entity/customerorder'
-        url_ = f'{url}?filter=moment>{from_date};moment<{to_date};&order=name,desc&expand=positions.assortment,state'
+    def get_orders(self, filter_str):
+        # Пример:
+        # from_date_f = f'{from_date} 00:00:00.000'
+        # to_date_f = f'{to_date} 23:59:00.000'
+        # filter_str = f'?filter=moment>{from_date};moment<{to_date};&order=name,desc&expand=positions.assortment,state'
+        url = f'{self.host}entity/customerorder{filter_str}'
         params = {'limit': 100, 'offset': 0}
         orders_list = []
         while True:
-            result = self.get_data(url_, params)
+            result = self.get_data(url, params)
             if result:
                 response_json = result.json()
                 orders_list += response_json.get('rows')
