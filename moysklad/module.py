@@ -91,23 +91,25 @@ class MoySklad:
             print('Не удалось обновить номенклатуру.')
         return response_json
 
-    def get_product_label(self, product):
+    def get_product_label(self, product, count=1):
         url = f'{self.host}entity/product/{product.get("id")}/export/'
         data = {
             "organization": {
                 "meta": {
-                    "href": "https://api.moysklad.ru/api/remap/1.2/entity/organization/29310743-0c62-11ef-0a80-1736000feae2",
+                    "href": "https://api.moysklad.ru/api/remap/1.2/entity/organization/"
+                            "29310743-0c62-11ef-0a80-1736000feae2",
                     "metadataHref": "https://api.moysklad.ru/api/remap/1.2/entity/organization/metadata",
                     "type": "organization",
                     "mediaType": "application/json",
                     "uuidHref": "https://online.moysklad.ru/app/#mycompany/edit?id=29310743-0c62-11ef-0a80-1736000feae2"
                 }
             },
-            "count": 10,
+            "count": count,
             "salePrice": {
               "priceType": {
                 "meta": {
-                  "href": "https://api.moysklad.ru/api/remap/1.2/context/companysettings/pricetype/2933628a-0c62-11ef-0a80-1736000feaeb",
+                  "href": "https://api.moysklad.ru/api/remap/1.2/context/companysettings/pricetype/"
+                          "2933628a-0c62-11ef-0a80-1736000feaeb",
                   "type": "pricetype",
                   "mediaType": "application/json"
                 }
@@ -115,7 +117,8 @@ class MoySklad:
             },
             "template": {
               "meta": {
-                "href": "https://api.moysklad.ru/api/remap/1.2/entity/assortment/metadata/customtemplate/d01825c6-7377-415b-8db4-f99b8dbd1fb4",
+                "href": "https://api.moysklad.ru/api/remap/1.2/entity/assortment/metadata/customtemplate/"
+                        "d01825c6-7377-415b-8db4-f99b8dbd1fb4",
                 "type": "embeddedtemplate",
                 "mediaType": "application/json"
               }
