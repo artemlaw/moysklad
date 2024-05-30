@@ -147,16 +147,13 @@ class MoySklad:
         logger.info(f'Получен остаток по номенклатуре: {len(stocks_list)}')
         return stocks_list
 
-    def get_orders(self, created_from):
+    def get_orders(self, from_date, to_date):
         url = f'{self.host}entity/customerorder'
-        # &expand=state.name
-        url_full = f'{url}?filter=created>{created_from}&order=name,desc&expand=positions.assortment,state'
+        url_ = f'{url}?filter=moment>{from_date};moment<{to_date};&order=name,desc&expand=positions.assortment,state'
         params = {'limit': 100, 'offset': 0}
-
         orders_list = []
-
         while True:
-            result = self.get_data(url_full, params)
+            result = self.get_data(url_, params)
             if result:
                 response_json = result.json()
                 orders_list += response_json.get('rows')
@@ -165,7 +162,7 @@ class MoySklad:
                     break
             else:
                 break
-        logger.info(f'Получено заказов: {len(orders_list)}')
+        logger.info(f'Получено заказов за период: {len(orders_list)}')
         return orders_list
 
 
