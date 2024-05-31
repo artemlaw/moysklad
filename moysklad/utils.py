@@ -64,7 +64,7 @@ def get_product_info(order):
     return product_name, product_id, label_wb_pdf
 
 
-def create_combined_pdf(orders):
+def create_combined_pdf(ms_client, orders):
     combined_pdf = fitz.open()
     dict_ = {}
 
@@ -87,7 +87,7 @@ def create_combined_pdf(orders):
             label_wb = order_.get('label')
             if label_wb:
                 label_wb_reader = fitz.open(stream=BytesIO(label_wb), filetype="pdf")
-                label_reader = fitz.open(stream=BytesIO(ms.get_label(product.get('id'))), filetype="pdf")
+                label_reader = fitz.open(stream=BytesIO(ms_client.get_label(product.get('id'))), filetype="pdf")
                 combined_pdf.insert_pdf(label_wb_reader, from_page=0, to_page=0)
                 combined_pdf.insert_pdf(label_reader, from_page=0, to_page=0)
 
@@ -102,6 +102,6 @@ if __name__ == '__main__':
     filters = f'?filter={filter_name}&order=name,desc&expand=positions.assortment,state'
     ms_orders = ms.get_orders(filters)
     # Используйте функцию create_combined_pdf для создания объединенного PDF-файла
-    overdue_orders_pdf = create_combined_pdf(ms_orders)
+    overdue_orders_pdf = create_combined_pdf(ms_client=ms, orders=ms_orders)
     overdue_orders_pdf.save("overdue_orders.pdf")
     print("PDF файлы успешно сохранены в overdue_orders.pdf")
