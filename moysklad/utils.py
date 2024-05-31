@@ -1,7 +1,6 @@
-import os
-import importlib.resources as pkg_resources
 import requests
 import fitz  # PyMuPDF pip install pymupdf
+import importlib.resources as pkg_resources
 from reportlab.lib.units import mm
 from reportlab.lib.utils import simpleSplit
 from reportlab.pdfgen import canvas
@@ -27,7 +26,6 @@ def create_custom_page(orders_count, p_name):
     can = canvas.Canvas(packet, pagesize=(width, height))
     with pkg_resources.path('moysklad', 'Roboto-Bold.ttf') as font_path:
         pdfmetrics.registerFont(TTFont('Roboto-Bold', str(font_path)))
-    # pdfmetrics.registerFont(TTFont('Roboto-Bold', 'Roboto-Bold.ttf'))  # Укажите путь к вашему шрифту
     font_size = 8
     can.setFont('Roboto-Bold', font_size)
     line1 = f'по 1 товару в заказе ({orders_count}шт. заказов)'
