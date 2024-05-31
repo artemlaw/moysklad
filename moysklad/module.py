@@ -91,8 +91,9 @@ class MoySklad:
             print('Не удалось обновить номенклатуру.')
         return response_json
 
-    def get_product_label(self, product, count=1):
-        url = f'{self.host}entity/product/{product.get("id")}/export/'
+    def get_label(self, product_id, product_type='bundle', count=1):
+        url = f'{self.host}entity/{product_type}/{product_id}/export/'
+        # Формируется на основе данных аккаунта
         data = {
             "organization": {
                 "meta": {
@@ -128,7 +129,7 @@ class MoySklad:
         if result:
             response_content = result.content
         else:
-            response_content = None
+            response_content = ''
             logger.error('Не удалось создать заказ.')
         return response_content
 
@@ -161,7 +162,10 @@ class MoySklad:
 
 
 if __name__ == '__main__':
-    MS_API_TOKEN = '**************'
+    MS_API_TOKEN = '******'
     ms = MoySklad(MS_API_TOKEN)
-    products = ms.get_products_list()
-    print(products[0])
+    from_date = '2024-05-30 00:00:00.000'
+    to_date = '2024-05-30 23:59:00.000'
+    filters = f'?filter=moment>{from_date};moment<{to_date};&order=name,desc&expand=positions.assortment,state'
+    ms_orders = ms.get_orders(filters)
+    print(f'Получено {len(ms_orders)} заказов')
