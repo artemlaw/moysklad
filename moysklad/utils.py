@@ -16,7 +16,7 @@ def get_value_by_name(data, target_name):
 
 
 def get_filter_name(order_str):
-    name_list = [name.strip() for name in order_str.split(',')]
+    name_list = [name.strip() for name in order_str.split(',') if name.strip()]
     return ';'.join(f'name={name}' for name in name_list) + ';'
 
 
@@ -95,7 +95,7 @@ def create_combined_pdf(ms_client, orders):
 if __name__ == '__main__':
     MS_API_TOKEN = '******'
     ms = MoySklad(MS_API_TOKEN)
-    orders_names = "1758748584, 1758676139,1757202294,  1757196839,1758620190"
+    orders_names = "1758748584, 1758676139,1757202294,  1757196839,1758620190, ,,"
     filter_name = get_filter_name(orders_names)
     filters = f'?filter={filter_name}&order=name,desc&expand=positions.assortment,state'
     ms_orders = ms.get_orders(filters)
